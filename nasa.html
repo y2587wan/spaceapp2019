@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    
+    <style>
+      /* Set the size of the div element that contains the map */
+      #map {
+        height: 600px;  /* The height is 400 pixels */
+        width: 100%;  /* The width is the width of the web page */
+       }
+       #content {
+        width: 250px;
+       }
+    </style>
+  </head>
+  
+  <body>
+    <h3>Radiation in Canada</h3>
+    <!--The div element for the map -->
+    <div id="map"></div>
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/scripts.js"></script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC5QACm9CVHKCSzIekWSeg3H1qhq28AhXg&callback=initMap">
+    </script>
+  </body>
+</html>

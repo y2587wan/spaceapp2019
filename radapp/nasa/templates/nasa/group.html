@@ -1,0 +1,46 @@
+
+{% if city_list %}
+    <h1>{{city_list.0.city}}</h1>
+    <table style="widli:100%">
+            <tr>
+                    <th>Identifier</th>
+                    <th>Province/Territory: {{ city.province }}</th>
+                    <th>Calculated Exposure Day 7</th>
+                    <th>Radon(mrem)</th>
+                    <th>External Terrestrial (mrem)</th>
+                    <th>Cosmic (mrem)</th>
+                    <th>Ingestion (mrem)</th>
+                    <th>Total (mrem)</th>
+            </tr>
+    {% for city in city_list %}
+    <tr>
+            <td>{{ city.identifier }}</td>
+            <td>{{ city.province }}</td>
+            <td>{{ city.exposure }}</td>
+            <td>{{ city.radon }}</td>
+            <td>{{ city.terrestrial }}</td>
+            <td>{{ city.cosmic }}</td>
+            <td>{{ city.ingestion }}</td>
+            <td>{{ city.total }}</td>
+    {% endfor %}
+    </tr>
+</table>
+{% else %}
+    <p>No polls are available.</p>
+{% endif %}
+
+<style>
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+th, td {
+  padding: 15px;
+}
+th {
+  text-align: left;
+}
+table {
+  border-spacing: 5px;
+}
+</style>
