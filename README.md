@@ -2,7 +2,9 @@
 
 Challenge 4: Radi-N2 Interactive Map: Graphical Representation of Radiation Across Canada
 ------------------------------------------------------------------------------------------
-http://www.asc-csa.gc.ca/eng/events/2019/space-apps-2019.asp#challenge-4
+Challenage Link: http://www.asc-csa.gc.ca/eng/events/2019/space-apps-2019.asp#challenge-4
+
+App Link: https://spaceapp-256514.appspot.com/
 
 Reinhardt Christiansen
 
