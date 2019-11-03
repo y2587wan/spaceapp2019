@@ -26,7 +26,7 @@ def results(request, question_id):
     return HttpResponse(rcity_listesponse % question_id)
 
 def group(request, city_name):
-    city_list = Rad.objects.filter(city=city_name)[:]
+    city_list = Rad.objects.filter(city__icontains=city_name)[:]
     context = {'city_list': city_list}
     return render(request, 'nasa/group.html', context)
 

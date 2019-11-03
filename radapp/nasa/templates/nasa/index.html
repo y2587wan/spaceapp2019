@@ -9,7 +9,7 @@
 <input type="checkbox" id="ingestion" value="ingestion" onclick="check(ing, 'ingestion')">Ingestion <div class="foo ing"></div>
 <input type="checkbox" id="exp" value="exp" onclick="check(e, 'exp')">Calculated Exposure <div class="foo e"></div>
 <input type="checkbox" id="total" value="total" onclick="check(to, 'total')">Total <div class="foo to"></div>
-<div style="margin-right: 200px">
+<div style="margin-right: 200px">   
 </div>
 <input type="checkbox" id="space9" value="space9" onclick="check(s9, 'space9')" >ISS 2009<div class="foo e"></div>
 
@@ -74,11 +74,15 @@ var map = null;
 function initMap() {
     var checkboxes = document.getElementsByTagName('input');
 
-for (var i=0; i<checkboxes.length; i++)  {
-  if (checkboxes[i].type == 'checkbox')   {
-    checkboxes[i].checked = true;
-  }
-}
+    for (var i=0; i<checkboxes.length; i++)  {
+        if (checkboxes[i].type == 'checkbox'){
+            if (checkboxes[i].value.includes('space')){
+                checkboxes[i].checked = false;  
+            } else {
+                checkboxes[i].checked = true;
+            }
+        }
+    }
     var infos = []
 
     var cities = []
@@ -131,8 +135,6 @@ for (var i=0; i<checkboxes.length; i++)  {
         sum += ter[i];
     }
     var avg = sum/total.length;
-    console.log("avg")
-    console.log(avg)
     if (avg > 150) {
         avg = 150
     }
@@ -182,7 +184,9 @@ for (var i=0; i<checkboxes.length; i++)  {
               strokeWeight: 0.4
           },
       })];
-  //console.log(to);
+    check(s9, "space9");
+    check(s13, "space13");
+    check(s19, "space19");
 }
 
 function circles(all, color, map, latlngs, infos, cities) {
@@ -194,8 +198,9 @@ function circles(all, color, map, latlngs, infos, cities) {
       var contentString = '<div id="content">'+
           '<div id="siteNotice">'+
           '</div>'+
-          '<a id="firstHeading" class="firstHeading" href='+ cities[i]  + '/group/>'+ cities[i] +'</a>'+
+          //'<a id="firstHeading" class="firstHeading" href='+ cities[i]  + '/group/>'+ cities[i] +'</a>'+
           '<div id="bodyContent">'+
+          '<h3>' +cities[i]+ '</h3>' +
           '<p style=>' +  infos[i] +'</p>'+
           '</div>'+
           '</div>';
@@ -209,32 +214,36 @@ function circles(all, color, map, latlngs, infos, cities) {
           infowindow.open(marker.get('map'), marker);
           InforObj[0] = infowindow;
       });
+      var minZoomLevel = 4;
       google.maps.event.addListener(map, 'zoom_changed', function() {
+        var pixelSizeAtZoom0 = 8; //the size of the icon at zoom level 0
+        var maxPixelSize = 350; //restricts the maximum size of the icon, otherwise the browser will choke at higher zoom levels trying to scale an image to millions of pixels
+        var minPixelSize = 300;
+        var zoom = map.getZoom();
 
-var pixelSizeAtZoom0 = 8; //the size of the icon at zoom level 0
-var maxPixelSize = 350; //restricts the maximum size of the icon, otherwise the browser will choke at higher zoom levels trying to scale an image to millions of pixels
+        var relativePixelSize = Math.round(pixelSizeAtZoom0*Math.pow(2,zoom)); // use 2 to the power of current zoom to calculate relative pixel size.  Base of exponent is 2 because relative size should double every time you zoom in
 
-var zoom = map.getZoom();
-var relativePixelSize = Math.round(pixelSizeAtZoom0*Math.pow(2,zoom)); // use 2 to the power of current zoom to calculate relative pixel size.  Base of exponent is 2 because relative size should double every time you zoom in
-
-if(relativePixelSize > maxPixelSize) //restrict the maximum size of the icon
-    relativePixelSize = maxPixelSize;
-
-//change the size of the icon
-marker.setIcon(
-    new google.maps.MarkerImage(
-        marker.getIcon().url, //marker's same icon graphic
-        null,//size
-        null,//origin
-        null, //anchor
-        new google.maps.Size(relativePixelSize, relativePixelSize) //changes the scale
-    )
-);        
-});
+        if(relativePixelSize > maxPixelSize) //restrict the maximum size of the icon
+            relativePixelSize = maxPixelSize;
+        if(relativePixelSize < minPixelSize)
+            relativePixelSize = minPixelSize;
+        console.log("zoom");
+        console.log(zoom);
+        console.log(relativePixelSize);
+        if (zoom < minZoomLevel) map.setZoom(minZoomLevel);
+        //change the size of the icon
+        marker.setIcon(
+            new google.maps.MarkerImage(
+                marker.getIcon().url, //marker's same icon graphic
+                null,//size
+                null,//origin
+                null, //anchor
+                new google.maps.Size(relativePixelSize, relativePixelSize) //changes the scale
+            )
+        );        
+        });
       markers.push(marker)
   }
-
-
   return markers
 }
 
